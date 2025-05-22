@@ -2,94 +2,98 @@
 #include <string.h>
 #include <stdlib.h>
 
-int main(){
-    // Declaração de variáveis para a carta 1
-    char estado1[3];
-    char codigo1[4];
-    char nomeCidade1[50];
-    int populacao1;
-    float area1;
-    float pib1;
-    int pontosTuristicos1;
+typedef struct {
+    char estado[3];
+    char codigo[4];
+    char nomeCidade[50];
+    long int populacao;
+    float area;
+    float pib; // em bilhões
+    int pontosTuristicos;
+    float densidade;
+    float pibPerCapita;
+    float superPoder;
+} Carta;
 
-    // Declaraçao de variáveis para a carta 2
-    char estado2[3];
-    char codigo2[4];
-    char nomeCidade2[50];
-    int populacao2;
-    float area2;
-    float pib2;
-    int pontosTuristicos2;
-
-    // leitura dos dados da carta 1
-    printf("✦ Super Trunfo - Países - Cartas ✦\n");
-    printf("───────────────── ⋆⋅☆⋅⋆ ────────────────\n");
-    printf("✦✦ Cadastro da Carta 1 ✦✦ \n");
-
-    printf("┌───────────────── ⋆⋅☆⋅⋆ ────────────────┐\n");
-    printf("│➜ Digite o Estado (ex: SP) ");
-    scanf("%s", &estado1);
-    printf("│➜ Digite o Código da Carta (ex: A01): ");
-    scanf("%s", codigo1);   
-    printf("│➜ Digite o Nome da Cidade: ");
-    while (getchar() != '\n');
-    fgets(nomeCidade1, 50, stdin);
-    nomeCidade1[strcspn(nomeCidade1, "\n")] = 0;    
-    printf("│➜ Digite a População: ");
-    scanf("%d", &populacao1);
-    printf("│➜ Digite a Área (em km²): ");
-    scanf("%f", &area1);
-    printf("│➜ Digite o PIB: ");
-    scanf("%f", &pib1);
-    printf("│➜ Digite os Pontos Turísticos: ");
-    scanf("%d", &pontosTuristicos1);
-    printf("└──────────────────────────────────────┘\n");
-
-    printf("\n");
-
-    // Leitura dos dados da Carta 2
+    // Função para entrada dos dados de uma carta 
+    void lerCarta(Carta *carta, int numero){ 
     
     printf("───────────────── ⋆⋅☆⋅⋆ ────────────────\n");
-    printf("✦✦ Cadastro da Carta 2 ✦✦\n");   
+    printf("✦✦ Cadastro da Carta %d ✦✦ \n",numero);
     printf("┌───────────────── ⋆⋅☆⋅⋆ ────────────────┐\n");
-    printf("│➜ Digite o Estado (ex: SP): ");
-    scanf(" %s", &estado2);
-    printf("│➜ Digite o Código da Carta (ex: B02): ");
-    scanf("%s", codigo2);   
+    printf("│➜ Digite o Estado (ex: SP) ");
+    scanf("%s", &carta->estado);
+    printf("│➜ Digite o Código da Carta (ex: A01): ");
+    scanf("%s", &carta->codigo);   
     printf("│➜ Digite o Nome da Cidade: ");
     while (getchar() != '\n');
-    fgets(nomeCidade2, 50, stdin);
-    nomeCidade2[strcspn(nomeCidade2, "\n")] = 0;  
+    fgets(carta->nomeCidade, 50, stdin);
+    carta->nomeCidade[strcspn(carta->nomeCidade, "\n")] = 0;    
     printf("│➜ Digite a População: ");
-    scanf("%d", &populacao2);
+    scanf("%ld", &carta->populacao);
     printf("│➜ Digite a Área (em km²): ");
-    scanf("%f", &area2);
+    scanf("%f", &carta->area);
     printf("│➜ Digite o PIB: ");
-    scanf("%f", &pib2);
-    printf("│➜ Digite os Pontos Turísticos: \n");
-    scanf("%d", &pontosTuristicos2);
-    printf("└──────────────────────────────────────┘\n");
+    scanf("%f", &carta->pib);
+    printf("│➜ Digite os Pontos Turísticos: ");
+    scanf("%d", &carta->pontosTuristicos);
+    printf("└──────────────────────────────────────┘\n");    
+    }
+    
+    // Função para calcular atributos derivados da carta
+    void calcularDados(Carta *c) {
+    c->densidade = c->populacao / c->area;
+    c->pibPerCapita = (c->pib * 1000000000) / c->populacao;
+    c->superPoder = (float)c->populacao + c->area + (c->pib * 1000000000) + c->pontosTuristicos + c->pibPerCapita + (1 / c->densidade);
+}
 
-    // Exibição das cartas
+    void exibirCarta(Carta c, int numero) {
     printf("┌───────────────── ⋆⋅☆⋅⋆ ────────────────┐\n");
-    printf("│✦✦ Carta 1 ✦✦ \n");
-    printf("│Estado: %s\n", estado1);
-    printf("│Código: %s\n", codigo1);
-    printf("│Nome da Cidade: %s\n", nomeCidade1);
-    printf("│População: %d\n", populacao1);
-    printf("│Área: %.2f km²\n", area1);
-    printf("│PIB: %.2f bilhões de reais\n", pib1);
-    printf("│Número de Pontos Turísticos: %d\n", pontosTuristicos1);
-    printf("│\n");
-    printf("│✦✦ Carta 2 ✦✦\n");
-    printf("│Estado: %s\n", estado2);
-    printf("│Código: %s\n", codigo2);
-    printf("│Nome da Cidade: %s\n", nomeCidade2);
-    printf("│População: %d\n", populacao2);
-    printf("│Área: %.2f km²\n", area2);
-    printf("│PIB: %.2f bilhões de reais\n", pib2);
-    printf("│Número de Pontos Turísticos: %d\n", pontosTuristicos2);
+    printf("│✦✦ Carta %d ✦✦ \n",numero);
+    printf("│Estado: %s\n", c.estado);
+    printf("│Código: %s\n", c.codigo);
+    printf("│Nome da Cidade: %s\n", c.nomeCidade);
+    printf("│População: %d\n", c.populacao);
+    printf("│Área: %.2f km²\n", c.area);
+    printf("│PIB: %.2f bilhões de reais\n", c.pib);
+    printf("│Número de Pontos Turísticos: %d\n", c.pontosTuristicos);
+    printf("│Densidade Populacional: %.2f hab/km²\n", c.densidade);
+    printf("│PIB per Capita: %.2f reais\n", c.pibPerCapita);
+    printf("│Super Poder: %.2f\n", c.superPoder);
     printf("└────────────────────────────────────────┘\n");
+    }
+
+// Função para comparar atributos e exibir resultados
+void compararCartas(Carta c1, Carta c2) {
+    
+    printf("┌───────────────── ⋆⋅☆⋅⋆ ────────────────┐\n");
+    printf("│\n✦✦ Comparação de Cartas ✦✦\n");
+    printf("│População: Carta 1 venceu (%d)\n", c1.populacao > c2.populacao);
+    printf("│Área: Carta 1 venceu (%d)\n", c1.area > c2.area);
+    printf("│PIB: Carta 1 venceu (%d)\n", c1.pib > c2.pib);
+    printf("│Pontos Turísticos: Carta 1 venceu (%d)\n", c1.pontosTuristicos > c2.pontosTuristicos);
+    printf("│Densidade Populacional: Carta 1 venceu (%d)\n", c1.densidade < c2.densidade); // menor vence
+    printf("│PIB per Capita: Carta 1 venceu (%d)\n", c1.pibPerCapita > c2.pibPerCapita);
+    printf("│Super Poder: Carta 1 venceu (%d)\n", c1.superPoder > c2.superPoder);
+    printf("└────────────────────────────────────────┘\n");
+}
+
+
+int main(){  
+
+    printf("✦ Super Trunfo - Países - Cartas ✦\n");
+    Carta carta1, carta2;
+
+    lerCarta(&carta1, 1);
+    calcularDados(&carta1);
+
+    lerCarta(&carta2, 2);
+    calcularDados(&carta2);
+
+    exibirCarta(carta1, 1);
+    exibirCarta(carta2, 2);
+
+    compararCartas(carta1, carta2);    
 
     
     return 0;
